@@ -1,0 +1,57 @@
+Express教程2__流程介绍和路由
+
+
+1.流程介绍：  
+配置路由  
+打开:app.js  
+打开:routes/index.js  
+打开:views/index.ejs  
+  
+2.路由简介:  
+views下的路径与路由,login页  
+  
+res.send("hello,world"); //只能一次性输出  
+  
+路由向显示层传递参数  
+  
+css路径在：public\stylesheets下  
+  
+3.路由  
+//express_demo.js 文件  
+var express = require('express');  
+var app = express();  
+  
+app.get('/', function (req, res) {  
+   res.send('Hello world');  
+})  
+//  /list_user 页面 GET 请求  
+app.get('/list_user', function (req, res) {  
+   console.log("/list_user GET 请求");  
+   res.send('用户列表页面');  
+})  
+  
+// 对页面 abcd, abxcd, ab123cd, 等响应 GET 请求  
+app.get('/ab*cd', function(req, res) {     
+   console.log("/ab*cd GET 请求");  
+   res.send('正则匹配');  
+})  
+  
+//  POST 请求  
+app.post('/', function (req, res) {  
+   console.log("主页 POST 请求");  
+   res.send('Hello POST');  
+})  
+
+//aa.html必须放在项目所在的盘符下
+app.get('/aa',function(req,res){  
+   res.sendFile('/www/nodejs/aa.html'); //输出aa.html中的内容,路径为绝对路径  
+})  
+  
+//无论get还是post全可以接收访问  
+app.all('/all', function (req, res) {  
+   console.log("POST,GET 请求全接受");  
+   res.send('Hello all');  
+})                    
+
+
+咨询QQ群号：168108911

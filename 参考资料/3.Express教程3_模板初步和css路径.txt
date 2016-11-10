@@ -1,0 +1,77 @@
+Express教程3_模板初步和css路径
+
+一、模板引擎： 
+默认的是jade模板 
+1.jade与ejs模板对比： 
+Jade 模板： 
+!!! 
+html 
+    head 
+        title #{title} 
+        meta(charset="UTF-8") 
+    body 
+        div.description #{description} 
+        ul 
+            - each data in datas 
+                li.item(id='item_'+data.index) 
+                    span= data.time 
+                    a.art(href=data.url)= data.title 
+ejs 模板： 
+ 
+<!doctype html> 
+<html> 
+<head> 
+    <meta charset="UTF-8"> 
+    <title><%=title%> - Page Test</title> 
+</head> 
+<body> 
+    <div class="description"><%=description%></div> 
+    <ul> 
+<% function data(data) { %> 
+        <li class="item" id="item_<%=data.index%>"><span><%=data.time%></span><a href="<%=data.url%>" class="art"><%=data.title%></a></li> 
+<% } %> 
+<% datas.map(data) %> 
+    </ul> 
+ 
+</body> 
+</html> 
+ 
+结果： 
+Jade 因为采用了类似 zen coding 的语法，比较新奇，但效率极其低下 
+以上部分的1万行数据解释，约为287ms 
+ejs用时：43ms 
+jade与ejs对比： 
+优点：简洁,复杂页面(千行以上)干净整洁，便于维护 
+缺点：html之外，另学一套语法，性能差 
+ 
+2.安装ejs模板 
+npm install ejs --save 
+3.app.js中修改 
+app.set('view engine', 'jade');改为 
+app.set('view engine', 'ejs'); 
+4.view文件夹下创建index.ejs 
+hello,<%= title %> 
+5.ejs模板四种输出方式 
+在ejs模板中，通常会用下面四种方式在HTML中输出服务端的变量或表达式的值： 
+a. 直接在<%%>中写表达式或变量。这种情况通常只是用来进行表达式计算或给变量赋值，不会有任何输出，被称作无缓冲的代码。 
+<% code %> 
+ 
+b. 在<%%>中通过=号输出变量或表达式的值。默认输出到页面中的内容会进行HTML转义。如<div>Hello</div>输出后会变成>lt;div>gt;Hello>lt;/div>gt; 
+<%= code %> 
+ 
+c. 在<%%>中通过-号输出变量或表达式的值。内容不经任何转义直接输出到页面上。 
+<%- code %> 
+ 
+d. 在结束标记%>之前添加-号，这样输出的内容会自动带有HTML标记的缩进。如： 
+<% code -%> 或 <% -%> 或 <%= code -%> 或 <%- code -%> 
+ 
+二、静态资源文件夹路径在app.js中查public 
+app.use(express.static(path.join(__dirname, 'public'))); 
+//指明public为express默认的静态路径 
+ 
+1.css\js\img路径可直接放在public文件夹中 
+2.导入用: 
+<script type="text/javascript" src="/js/js.js"></script> 
+<link rel="stylesheet" href="/style/css.css">                    
+
+咨询QQ群号:168108911
