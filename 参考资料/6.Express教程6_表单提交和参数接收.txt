@@ -1,0 +1,62 @@
+	Express教程6_表单提交和参数接收
+1.req.param('name')  
+express 4.x api文档已写明该方法将会弃用  
+express4.x项目使用req.param()时不会报错，但启动项目时会有警告提示  
+  
+2.req.params //获取"express路由器传递的参数"  
+router.get('/zhuce/:subflag', function(req, res) {  
+    console.log("bbbbbbbb="+req.params.subflag);  
+}  
+http://localhost:3000/users/zhuce/15  
+输出=>15  
+  
+3.req.query['name']   //只接受get和地址栏传来的参数  
+  
+4.req.body['name']    //只接受post传来的参数  
+使用该属性时， 得先确认app.js中有没有导入“body-parser”，express 4.x默认已导入  
+  
+1./routes/users中  
+  
+var userModel = require('../models/UserModel');  
+  
+router.all('/login', function(req, res) {  
+  subflag = req.param('subflag');  
+  //console.log(subflag);  
+  //console.log(subflag==undefined);  
+  if(subflag==undefined){  
+    res.render('login');  
+  }else{  
+    res.send("执行登录");  
+  }  
+});  
+  
+router.post('/zhuce', function(req, res) {  
+    if(subflag!=undefined){  
+        //email=req.param('email');  
+        //res.send('zhuce收到参数:email:'+email);  
+        userModel.zhuce(req,res);  
+    }  
+});  
+  
+2.models/UserModel.js  
+  
+module.exports={  
+    zhuce:function(req,res){  
+        arr = ['email','pwd','nicheng'];  
+        sendStr='';  
+        for(var i=0;i<arr.length;i++){  
+            console.log(req.param(arr[i]));  
+            sendStr += (req.param(arr[i]));  
+            sendStr += (',');  
+        }  
+        res.send(sendStr);  
+        //----对库操作----------  
+  
+        //----------------------  
+    },  
+    login:function(req,res){  
+        //登录  
+    }  
+}                    
+
+咨询QQ群号:168108911

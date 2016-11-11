@@ -1,0 +1,82 @@
+	Express教程5_显示登录注册模态对话框
+1.index.ejs添加模态框
+<input type="button" class="btn btn-success" data-toggle="modal" data-target="#loginModal" href="./users/login" value="登录/注册"/>
+最下面加：
+<div class="modal fade" id="loginModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <!--------href内容----------------->
+            
+        <!--------------------------------->
+        </div>
+    </div>
+</div>
+2.views下建立login.ejs
+<div style="height:330px;background:#ffffff;">
+    <div style="margin:9px 9px;border:1px solid green;width:400px;float:left;">
+    <form method="post" action="./users/login">
+    <table class="table">
+       <tr>
+        <td colspan="2" align="center">登录</td>
+       </tr>
+       <tbody>
+          <tr>
+         <td align="right">email:</td>
+         <td><input type="text" name="email" class="form-control" placeholder="文本输入"/></td>
+          </tr>
+          <tr>
+         <td align="right">密码:</td>
+         <td><input type="password" name="pwd" class="form-control" placeholder="密码"/></td>
+          </tr>
+          <tr>
+         <td colspan="2" align="center" valign="middle">
+            <input type="submit" value="登录" class="btn btn-success"/>
+         </td>
+          </tr>
+       </tbody>
+    </table>
+    </form>
+    </div>
+    <div style="margin:9px 9px;border:1px solid green;width:400px;float:left;">
+    <form method="post" action="./users/zhuce">
+    <table class="table">
+       <tr>
+        <td colspan="2" align="center">注册</td>
+       </tr>
+       <tbody>
+          <tr>
+         <td align="right">email:</td>
+         <td><input type="text" name="email" class="form-control" placeholder="文本输入"/></td>
+          </tr>
+          <tr>
+         <td align="right">密码:</td>
+         <td><input type="password" name="pwd" class="form-control" placeholder="密码"/></td>
+          </tr>
+          <tr>
+         <td align="right">重复:</td>
+         <td><input type="password" name="repwd" class="form-control" placeholder="密码"/></td>
+          </tr>
+          <tr>
+         <td align="right">昵称:</td>
+         <td><input type="text" name="nicheng" class="form-control" placeholder="昵称"/></td>
+          </tr>
+          <tr>
+         <td colspan="2" align="center"  valign="middle">
+            <input type="submit" value="注册" class="btn btn-success"/>
+         </td>
+          </tr>
+       </tbody>
+    </table>
+    </form>
+    </div>
+</div>
+3.添加登录页面
+routes/users.js中添加
+router.all('/login', function(req, res) {
+  res.render('login');
+});                    
+
+
+
+
+咨询qq群号:168108911
