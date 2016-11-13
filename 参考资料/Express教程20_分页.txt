@@ -1,27 +1,5 @@
-var connPool = require("./ConnPool");
-var async = require("async");
-
-module.exports={
-    ask:function(req,res){
-        loginbean = req.session.loginbean;
-        pool = connPool();
-        //从pool中获取连接(异步,取到后回调)
-        pool.getConnection(function(err,conn){
-            var userAddSql = 'insert into question (typeid,title,content,uid,createtime) values(?,?,?,?,current_timestamp)';
-            var param = [req.body['typeid'],req.body['title'],req.body['content'],loginbean.id];
-            conn.query(userAddSql,param,function(err,rs){
-                if(err){
-                    //console.log('insert err:',err.message);
-                    //res.send("数据库错误,错误原因:"+err.message);
-                    return;
-                }
-                //res.send('提问成功');
-                res.redirect('../');
-            })
-            conn.release();
-        });
-    },
-    queList:function(req,res,loginbean){
+1.models/QuestionModel.js中修改方法queList：
+queList:function(req,res,loginbean){
         pool = connPool();
         //从pool中获取连接(异步,取到后回调)
         pool.getConnection(function(err,conn)
@@ -66,13 +44,52 @@ module.exports={
                     })
                 }
             },function(err, results) {
-                console.log(results);
+                //console.log(results);
 
                 rs=results['two'];
                 res.render('index', {loginbean:loginbean,page:page,rs:rs,count:count,countPage:countPage});
                 //res.send('查完');
             });
+
+
+
             conn.release();
         });
-    }
-}
+    },
+2.index.ejs中：
+<table class="table">
+            <tbody class="answer">
+            <%
+                if(rs!=undefined){
+                    rs.forEach(function(row){
+            %>
+            <tr>
+                <td>
+                    <div><%=row['renum']%><br/>回答</div>
+                </td>
+                <td><%=row['looknum']%><br/>浏览</td>
+                <td><a href="/question/detail?qid=<%=row['qid']%>" target="_blank"><%=row['title']%></a></td>
+            </tr>
+            <%      })
+                }
+                if(count>0){
+            %>
+            <tr>
+                <td colspan="3" align="center">
+                    总共<%=count%>条记录,
+                    第<%=page%>/<%=countPage%>页,
+                    <% if(page!=1){%>
+                    <a href="/?page=1">首页</a>&nbsp;
+                    <a href="/?page=<%=(page-1)%>">上一页</a>&nbsp;
+                    <% } %>
+                    <% if(page!=countPage) {%>
+                    <a href="/?page=<%=(page+1)%>">下一页</a>&nbsp;
+                    <a href="/?page=<%=countPage%>">尾页</a>
+                    <%}%>
+                </td>
+            </tr>
+            <%
+                }
+            %>
+            </tbody>
+        </table>

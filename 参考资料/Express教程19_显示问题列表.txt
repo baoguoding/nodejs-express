@@ -1,0 +1,46 @@
+1.models/question.js中添加方法
+queList:function(req,res,loginbean){
+        pool = connPool();
+        //从pool中获取连接(异步,取到后回调)
+        pool.getConnection(function(err,conn)
+        {
+            if(err)
+            {
+                //console.log('insert err:',err.message);
+                res.send("获取连接错误,错误原因:"+err.message);
+                return;
+            }
+            var listSql = 'select qid,title,looknum,renum,finished,updtime,createtime from question order by qid desc';
+            var param = [];
+            conn.query(listSql,param,function(err,rs){
+                if(err){
+                    //console.log('insert err:',err.message);
+                    res.send("数据库错误,错误原因:"+err.message);
+                    return;
+                }
+                //console.log(rs);
+                //console.log(rs.length);
+                res.render('index', {loginbean:loginbean,rs:rs});
+            })
+            conn.release();
+        });
+    },
+2.index.js中调用
+var questionModel = require('../models/QuestionModel')
+
+questionModel.queList(req,res,loginbean);
+
+3.index.ejs中
+<table class="table">
+            <tbody class="answer">
+            <% rs.forEach(function(row){ %>
+            <tr>
+                <td>
+                    <div><%=row['looknum']%><br/>回答</div>
+                </td>
+                <td><%=row['renum']%><br/>浏览</td>
+                <td><%=row['title']%></td>
+            </tr>
+            <% }) %>
+            </tbody>
+        </table>    

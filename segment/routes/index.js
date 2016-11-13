@@ -3,6 +3,7 @@ var router = express.Router();
 var multiparty = require('multiparty');
 var util = require('util');
 var fs = require('fs');
+var questionModel = require('../models/QuestionModel')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -11,7 +12,10 @@ router.get('/', function(req, res, next) {
         console.log("loginbean:"+loginbean);
         console.log(loginbean.nicheng);
     }
-    res.render('index', {loginbean:loginbean});
+
+    questionModel.queList(req,res,loginbean);
+
+    //res.render('index', {loginbean:loginbean});
 });
 
 //----注销session
