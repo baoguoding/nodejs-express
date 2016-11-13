@@ -4,9 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var question = require('./routes/question');
 
 var app = express();
 
@@ -20,10 +22,16 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({secret: 'recommand 128 bytes random string', // 建议使用 128 个字符的随机字符串
+    cookie: { maxAge: 20 * 60 * 1000 }, //cookie生存周期20*60秒
+    resave: true,  //cookie之间的请求规则,假设每次登陆，就算会话存在也重新保存一次
+    saveUninitialized: true //强制保存未初始化的会话到存储器
+}));  //这些是写在app.js里面的
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/question', question);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,0 +1,46 @@
+Express教程11_session
+
+一、配置：    
+1.安装express-session    
+npm install express-session --save-dev    //注意-g无效    
+    
+2.app.js中添加和修改：  
+var session = require('express-session'); 
+ 
+app.use(cookieParser());         //必须在此行下面添加    
+app.use(session({secret: 'recommand 128 bytes random string', // 建议使用 128 个字符的随机字符串    
+cookie: { maxAge: 20 * 60 * 1000 }, //cookie生存周期20*60秒    
+resave: true,  //cookie之间的请求规则,假设每次登陆，就算会话存在也重新保存一次    
+saveUninitialized: true //强制保存未初始化的会话到存储器    
+}));  //这些是写在app.js里面的    
+    
+二、创建loginbean    
+/jsbean/LoginBean.js    
+function LoginBean(){    
+    this.id;    
+    this.nicheng;    
+}    
+module.exports = LoginBean;     
+    
+三、登录成功创建session    
+var LoginBean = require("../jsbean/LoginBean");    
+    
+if(rs.length>0){    
+    loginbean = new LoginBean();    
+    loginbean.id=rs[0].uid;    
+    loginbean.nicheng = rs[0].nicheng;    
+    req.session.loginbean = loginbean;    
+    //res.send('登录成功');    
+    res.redirect('/');    //跳转回index页    
+}    
+    
+三、首页判断session是否存在    
+    /routes/index.js中:    
+    
+    router.get('/', function(req, res, next) {    
+    loginbean = req.session.loginbean;    
+    //console.log("loginbean:"+loginbean);    
+  res.render('index');    
+});    
+
+咨询QQ群号:168108911  

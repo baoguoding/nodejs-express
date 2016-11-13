@@ -1,0 +1,31 @@
+	Express教程12_注销
+
+1.修改index.ejs 
+/views/index.ejs中: 
+ 
+<% if(loginbean==undefined){ %> 
+<input type="button" class="btn btn-success" data-toggle="modal" href="./users/login" data-target="#loginModal" value="登录/注册"/> 
+<% }else{ %> 
+    你好<%=loginbean.nicheng%>
+<input type="button" class="btn btn-success" value="注销" onClick="javascript:location.href='/logout'"/> 
+<% } %> 
+
+2.router.get('/', function(req, res, next) {
+  //res.send("hello,index");
+  loginbean = req.session.loginbean;
+  console.log(loginbean); 
+  
+  //console.log("loginbean:"+loginbean); 
+  res.render('index', {loginbean:loginbean});
+});
+
+3.routes/index.js中添加： 
+//----注销session 
+router.get('/logout',function(req,res){ 
+      req.session.destroy(function(err) { 
+          //res.send("location.href='/index';"); 
+            res.redirect('/'); 
+        }) 
+});           
+
+咨询QQ群号:168108911           

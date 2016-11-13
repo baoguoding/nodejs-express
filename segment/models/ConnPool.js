@@ -1,10 +1,10 @@
 var mysql  = require('mysql');
 module.exports = (function(){
     var pool = mysql.createPool({
-        host: '192.168.10.64',       //主机
+        host: '127.0.0.1',       //主机
         user: 'root',               //MySQL认证用户名 
         password: 'root',        //MySQL认证用户密码 
-        database: 'test',
+        database: 'segment',
         port: '3306'                   //端口号 
     });
     pool.on('connection', function(connection) {

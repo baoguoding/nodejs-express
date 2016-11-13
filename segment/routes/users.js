@@ -13,6 +13,7 @@ router.all('/login', function(req, res) {
     subflag = req.body['subflag'];
     //console.log(subflag);
     //console.log(subflag==undefined);
+    console.log("============="+subflag);
     if(subflag==undefined){
         res.render('login');
     }else{

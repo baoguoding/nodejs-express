@@ -1,0 +1,116 @@
+1.分离出header.js   
+<%- include header %>   
+2.撰写列表   
+<div style="float:right;line-height:2em;">  
+    <table>  
+      <tr>  
+        <td>  
+    <input type="text"  placeholder="请输入关键词" style="width:240px;height:30px;" >  
+        </td>  
+        <td>  
+        >nbsp;  
+    <span class="glyphicon glyphicon-zoom-in" style="font-size:1.5em;cursor:pointer;"/>  
+        >nbsp;>nbsp;  
+        </td>  
+    <% if(loginbean==undefined){ %>  
+        <td>  
+    <input type="button" class="btn btn-success" data-toggle="modal" href="./users/login" data-target="#loginModal" value="登录/注册"/>  
+        >nbsp;>nbsp;  
+        </td>  
+    <% }else{ %>  
+        <td>  
+        你好<%=loginbean.nicheng%>  
+        >nbsp;>nbsp;>nbsp;  
+        </td>  
+        <td>  
+        <div class="btn-group-vertical">  
+            <button type="button" class="btn btn-default dropdown-toggle"   
+              data-toggle="dropdown">  
+              撰写  
+              <span class="caret"></span>  
+            </button>  
+            <ul class="dropdown-menu">  
+              <li><a href="/question/ask">提问题</a></li>  
+              <li><a href="#">写文章</a></li>  
+              <li><a href="#">记笔记</a></li>  
+              <li class="divider"></li>  
+              <li><a href="#">草稿箱</a></li>  
+            </ul>  
+          </div>  
+        </div>  
+        </td>  
+        <td>  
+        >nbsp;>nbsp;>nbsp;  
+    <input type="button" class="btn btn-success" value="注销" onClick="javascript:location.href='/logout'"/>  
+        >nbsp;>nbsp;>nbsp;  
+        </td>  
+    <% } %>  
+        </tr>  
+          </table>  
+    </div> 
+3.ask.js界面   
+<%- include head %> 
+<br/> 
+<form method="post" action="./ask">  
+    <table align="center">  
+        <tr>  
+            <td align="right">标题:</td>  
+            <td><input type="text" name="title"/></td>  
+        </tr>  
+        <tr>  
+            <td align="right">分类:</td>  
+            <td>  
+                <select name="type"/>  
+                <option value="1">javascript</option>  
+                <option value="2">php</option>  
+                <option value="3">pathon</option>  
+                <option value="4">java</option>  
+                <option value="5">mysql</option>  
+                <option value="6">ios</option>  
+                <option value="7">android</option>  
+                <option value="8">node.js</option>  
+                <option value="9">html5</option>  
+                <option value="10">lunux</option>  
+                <option value="11">c++</option>  
+                <option value="12">其他</option>  
+                </select>  
+            </td>  
+        </tr>  
+        <tr>  
+            <td align="right">  
+                  
+            </td>  
+        </tr>  
+        <tr>  
+            <td align="right" valign="top">内容:</td>  
+            <td>  
+                <textarea id="content" name="content" cols="120" rows="9"></textarea>  
+            </td>  
+        </tr>  
+        <tr>  
+            <td colspan="2" align="center">  
+                <input type="hidden" name="subflag" value="1"/>  
+                <input type="submit" value="提问"/>  
+            </td>  
+        </tr>  
+    </table>  
+    </form>  
+  </body>  
+</html>  
+4.routes/question.js中   
+var express = require('express');  
+var router = express.Router();  
+  
+router.all('/ask', function(req, res) {  
+      
+    loginbean = req.session.loginbean;  
+    if(loginbean==undefined){  
+        res.send("<script>alert('登录过期,请重新登录');location.href='/';</script>");  
+        return;  
+    }  
+    res.render('ask');  
+}) 
+ 
+module.exports = router;
+
+韬略课堂

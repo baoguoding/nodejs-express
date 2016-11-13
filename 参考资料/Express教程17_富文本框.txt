@@ -1,0 +1,34 @@
+1.下载地址:http://xheditor.com/download.html
+2.导入：
+xheditor-1.2.2.min.js
+jquery //自带就不用了
+三个文件夹
+xheditor_emot
+xheditor_lang
+xheditor_skin
+3.导入：
+<script type="text/javascript" src="jquery/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="xheditor-1.2.2.min.js"></script>
+<script type="text/javascript" src="xheditor_lang/zh-cn.js"></script>
+4.text中使用：
+<div class="section"><textarea name="preview" class="xheditor" rows="8" cols="120"></textarea></div>
+5.带Ajax上传的textarea
+<script type="text/javascript">
+$(pageInit);
+function pageInit()
+{
+    $.extend(XHEDITOR.settings,{shortcuts:{'ctrl+enter':submitForm}});
+    $('#preview').xheditor({html5Upload:false,upMultiple:'1',upLinkUrl:"upload.php",upLinkExt:"zip,rar,txt",upImgUrl:"upload.php",upImgExt:"jpg,jpeg,gif,png",upFlashUrl:"upload.php",upFlashExt:"swf",upMediaUrl:"upload.php",upMediaExt:"wmv,avi,wma,mp3,mid"});
+}
+function insertUpload(arrMsg)
+{console.log(arrMsg)
+    var i,msg;
+    for(i=0;i<arrMsg.length;i++)
+    {
+        msg=arrMsg[i];
+        $("#uploadList").append('<option value="'+msg.id+'">'+msg.localname+'</option>');
+    }
+}
+function submitForm(){$('#frmDemo').submit();}
+</script>
+<div class="section"><textarea id="preview" name="preview" rows="8" cols="120"></textarea></div><!--去掉class="xheditor"-->  

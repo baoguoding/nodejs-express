@@ -1,0 +1,47 @@
+1.建表
+create table question(
+qid bigint not null primary key auto_increment,
+typeid int not null,        /*问题分类*/
+title varchar(240) not null,    /*问题标题*/
+content varchar(600) not null,    /*问题内容*/
+uid bigint not null,        /*提问者id*/
+looknum bigint not null default 0,/*查看次数*/
+renum int not null default 0,    /*回复次数*/
+finished tinyint not null default 0,/*是否结贴,0表未结贴,1表结贴*/
+updtime timestamp not null,
+createtime timestamp not null
+)ENGINE=myisam DEFAULT CHARSET=utf8;
+2.修改routes/question.js
+subflag = req.body['subflag'];
+    if(subflag==undefined){
+        res.render('ask', {title:'提问题',loginbean: loginbean});
+    }else{
+        //发提问
+        questionModel.ask(req,res);
+    }
+3.创建models/questionModel.js
+var connPool = require("./ConnPool");
+module.exports={
+    ask:function(req,res){
+        loginbean = req.session.loginbean;
+        pool = connPool();
+        //从pool中获取连接(异步,取到后回调)
+        pool.getConnection(function(err,conn){
+            var userAddSql = 'insert into question (typeid,title,content,uid,createtime) values(?,?,?,?,current_timestamp)';
+            var param = [req.body['typeid'],req.body['title'],req.body['content'],loginbean.id];
+            conn.query(userAddSql,param,function(err,rs){
+                if(err){
+                    //console.log('insert err:',err.message);
+                    //res.send("数据库错误,错误原因:"+err.message);
+                    return;
+                }
+                //res.send('提问成功');
+                res.redirect('../');
+            })
+            conn.release();
+        });
+    },
+    
+}     
+
+韬略课堂

@@ -1,4 +1,5 @@
 var connPool = require("./ConnPool");
+var LoginBean = require("../jsbean/LoginBean");
 module.exports={
     zhuce:function(req,res){
         pool = connPool();
@@ -21,7 +22,8 @@ module.exports={
                     res.send(sendStr);
                     return;
                 }
-                res.send('注册成功');
+                res.redirect(307,"./login");
+                //res.send('注册成功');
             })
             conn.release();
         });
@@ -49,7 +51,15 @@ module.exports={
                 console.log(rs);
                 //console.log(rs.length);
                 if(rs.length>0){
-                    res.send('登录成功');
+                    //res.send('登录成功');
+                    if(rs.length>0){
+                        loginbean = new LoginBean();
+                        loginbean.id=rs[0].uid;
+                        loginbean.nicheng = rs[0].nicheng;
+                        req.session.loginbean = loginbean;
+                        //res.send('登录成功');
+                        res.redirect('/');    //跳转回index页
+                    }
                 }else{
                     res.send("email/密码错误");
                 }
