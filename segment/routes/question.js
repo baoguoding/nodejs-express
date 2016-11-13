@@ -17,4 +17,8 @@ router.all('/ask', function(req, res) {
     }
 })
 
+router.get('/detail', function(req, res) {
+    questionModel.queDetail(req,res);
+})
+
 module.exports = router;

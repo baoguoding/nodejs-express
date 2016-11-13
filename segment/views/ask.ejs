@@ -9,7 +9,8 @@
         $('#content').xheditor({html5Upload:false,upMultiple:'1',upLinkUrl:"/uploadFile",upLinkExt:"zip,rar,txt",upImgUrl:"/uploadImg",upImgExt:"jpg,jpeg,gif,png",upFlashUrl:"/uploadFlash",upFlashExt:"swf",upMediaUrl:"/uploadMedia",upMediaExt:"wmv,avi,wma,mp3,mid"});
     }
     function insertUpload(arrMsg)
-    {console.log(arrMsg)
+    {
+        console.log(arrMsg)
         var i,msg;
         for(i=0;i<arrMsg.length;i++)
         {
@@ -18,9 +19,15 @@
         }
     }
     function submitForm(){$('#frmDemo').submit();}
+
+    function onsub(){
+        typename = $(typeid).find("option:selected").text();
+        myform.typename.value=typename;
+        return true;
+    }
 </script>
 <br/>
-<form method="post" action="./ask">
+<form name = "myform" method="post" action="./ask" onsubmit="return onsub();">
     <table align="center">
         <tr>
             <td align="right">标题:</td>
@@ -29,7 +36,7 @@
         <tr>
             <td align="right">分类:</td>
             <td>
-                <select name="typeid"/>
+                <select name="typeid" id="typeid"/>
                 <option value="1">javascript</option>
                 <option value="2">php</option>
                 <option value="3">pathon</option>
@@ -59,6 +66,7 @@
         <tr>
             <td colspan="2" align="center">
                 <input type="hidden" name="subflag" value="1"/>
+                <input type="hidden" name="typename"/>
                 <input type="submit" value="提问"/>
             </td>
         </tr>

@@ -1,0 +1,23 @@
+1.重建表 
+create table question( 
+qid bigint not null primary key auto_increment, 
+typeid int not null,        /*问题分类*/ 
+typename varchar(120) not null,  /*分类名称*/ 
+title varchar(240) not null,    /*问题标题*/ 
+content text not null,    /*问题内容*/ 
+uid bigint not null,        /*提问者id*/ 
+nicheng varchar(120) not null, /*提问者昵称*/ 
+looknum bigint not null default 0,/*查看次数*/ 
+renum int not null default 0,    /*回复次数*/ 
+finished tinyint not null default 0,/*是否结贴,0表未结贴,1表结贴*/ 
+updtime timestamp not null, 
+createtime timestamp not null 
+)ENGINE=myisam DEFAULT CHARSET=utf8; 
+2.修改ask.ejs 
+function onsub(){ 
+        typename = $(typeid).find("option:selected").text(); 
+        myform.typename.value=typename; 
+        return true; 
+    } 
+3.修改:models/questionModel.js中的ask 
+添加typename和nicheng 
