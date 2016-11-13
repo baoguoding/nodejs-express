@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "express-session": "^1.14.2",
+    "multiparty": "^4.1.2",
     "mysql": "^2.12.0"
   }
 }

@@ -21,6 +21,8 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser({uploadDir:'./uploadtemp'}));//设置上传临时文件夹
+
 app.use(cookieParser());
 app.use(session({secret: 'recommand 128 bytes random string', // 建议使用 128 个字符的随机字符串
     cookie: { maxAge: 20 * 60 * 1000 }, //cookie生存周期20*60秒

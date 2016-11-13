@@ -6,7 +6,7 @@
     function pageInit()
     {
         $.extend(XHEDITOR.settings,{shortcuts:{'ctrl+enter':submitForm}});
-        $('#content').xheditor({html5Upload:false,upMultiple:'1',upLinkUrl:"upload.php",upLinkExt:"zip,rar,txt",upImgUrl:"upload.php",upImgExt:"jpg,jpeg,gif,png",upFlashUrl:"upload.php",upFlashExt:"swf",upMediaUrl:"upload.php",upMediaExt:"wmv,avi,wma,mp3,mid"});
+        $('#content').xheditor({html5Upload:false,upMultiple:'1',upLinkUrl:"/uploadFile",upLinkExt:"zip,rar,txt",upImgUrl:"/uploadImg",upImgExt:"jpg,jpeg,gif,png",upFlashUrl:"/uploadFlash",upFlashExt:"swf",upMediaUrl:"/uploadMedia",upMediaExt:"wmv,avi,wma,mp3,mid"});
     }
     function insertUpload(arrMsg)
     {console.log(arrMsg)
