@@ -1,0 +1,16 @@
+1.models/question.js的queDetail方法中：
+loginbean = req.session.loginbean;
+res.render('queDetail', {loginbean:loginbean,rs:rs});     
+2.queDetail.ejs
+<%- include header %>
+<table align='center' border="1">
+    <tr>
+        <td rowspan="2" valign="top"><%=rs[0].nicheng%></td>
+        <td align="center"><%=rs[0].title%></td>
+    </tr>
+    <tr>
+        <td><%-rs[0].content%></td>
+    </tr>
+</table>
+</body>
+</html>

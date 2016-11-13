@@ -58,7 +58,10 @@ module.exports={
                         loginbean.nicheng = rs[0].nicheng;
                         req.session.loginbean = loginbean;
                         //res.send('登录成功');
-                        res.redirect('/');    //跳转回index页
+                        //res.redirect('/');    //跳转回index页
+                        targeturl = req.body['targeturl'];
+                        console.log("Target URL: "+targeturl);
+                        res.redirect(targeturl);    //跳转回index页
                     }
                 }else{
                     res.send("email/密码错误");

@@ -79,7 +79,7 @@ module.exports={
         qid = req.query['qid'];
         if(qid!=undefined){
             sqlupd = 'update question set looknum=looknum+1 where qid=?';
-            sqldetail = 'select qid,title,content,uid,looknum,renum,finished,updtime,createtime from question where qid=?';
+            sqldetail = 'select qid,title,content,uid,nicheng, looknum,renum,finished,updtime,createtime from question where qid=?';
             param=[qid];
             pool = connPool();
             //从pool中获取连接(异步,取到后回调)
@@ -105,7 +105,9 @@ module.exports={
                 },function(err, results) {
                     //console.log(results);
                     rs=results['two'];
-                    res.render('queDetail', {rs:rs});
+                    loginbean = req.session.loginbean;
+
+                    res.render('queDetail', {loginbean:loginbean,rs:rs});
                     //res.send('查完');
                 });
 

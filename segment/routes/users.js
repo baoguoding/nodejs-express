@@ -13,7 +13,7 @@ router.all('/login', function(req, res) {
     subflag = req.body['subflag'];
     //console.log(subflag);
     //console.log(subflag==undefined);
-    console.log("============="+subflag);
+    console.log("subflag: "+subflag);
     if(subflag==undefined){
         res.render('login');
     }else{
@@ -24,11 +24,11 @@ router.all('/login', function(req, res) {
 
 router.post('/zhuce', function(req, res) {
     subflag=req.body['subflag'];
-    //if(subflag!=undefined){
+    if(subflag!=undefined){
         userModel.zhuce(req,res);
-    //}else{
-        //res.send("表单提交错误");
-    //}
+    }else{
+        res.send("表单提交错误");
+    }
 });
 
 module.exports = router;

@@ -1,6 +1,12 @@
+<script>
+    $(function(){
+        loginForm.targeturl.value=location.href;
+        zhuceForm.targeturl.value=location.href;
+    })
+</script>
 <div style="height:330px;background:#ffffff;">
     <div style="margin:9px 9px;border:1px solid green;width:400px;float:left;">
-        <form method="post" action="./users/login">
+        <form method="post" name="loginForm" action="/users/login">
             <table class="table">
                 <tr>
                     <td colspan="2" align="center">登录</td>
@@ -17,6 +23,7 @@
                 <tr>
                     <td colspan="2" align="center" valign="middle">
                         <input type="hidden" name="subflag" value="1"/>
+                        <input type="hidden" name="targeturl" value="/"/>
                         <input type="submit" value="登录" class="btn btn-success"/>
                     </td>
                 </tr>
@@ -25,7 +32,7 @@
         </form>
     </div>
     <div style="margin:9px 9px;border:1px solid green;width:400px;float:left;">
-        <form method="post" action="./users/zhuce">
+        <form method="post" name="zhuceForm" action="/users/zhuce">
             <table class="table">
                 <tr>
                     <td colspan="2" align="center">注册</td>
@@ -50,6 +57,7 @@
                 <tr>
                     <td colspan="2" align="center"  valign="middle">
                         <input type="hidden" name="subflag" value="1"/>
+                        <input type="hidden" name="targeturl" value="/"/>
                         <input type="submit" value="注册" class="btn btn-success"/>
                     </td>
                 </tr>
