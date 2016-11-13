@@ -187,7 +187,9 @@ module.exports={
                             res.send('数据库错误:'+err);
                             console.log('提交事物出错');
                         }
-                        res.send('回复成功');
+                        //res.send('回复成功');
+                        res.redirect("/question/detail?qid="+qid);
+
                         console.log('success!');
                     });
                 });
