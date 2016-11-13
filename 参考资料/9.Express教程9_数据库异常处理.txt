@@ -1,0 +1,26 @@
+Express教程9_数据库异常处理
+
+1.字符串查找 
+var tempStr = "tempText" ; 
+var bool = tempStr.indexOf("Texxt"); 
+//返回大于等于0的整数值(找到的位置)，若不包含"Text"则返回"-1。 
+2.修改UserModel.js 
+conn.query(userAddSql,param,function(err,rs){ 
+    if(err){ 
+        //console.log('insert err:',err.message); 
+        //res.send("数据库错误,错误原因:"+err.message); 
+        errStr = err.message; 
+        sendStr = "<script> "; 
+        if(errStr.indexOf('emailuniq')>-1){ 
+            sendStr += "alert('email重复');"; 
+        }else if(errStr.indexOf('nichenguiq')>-1){ 
+            sendStr += "alert('昵称重复');"; 
+        } 
+        sendStr += " history.back();</script>" 
+        res.send(sendStr); 
+        return; 
+    } 
+    res.send('注册成功'); 
+})         
+
+咨询QQ群号:168108911             

@@ -1,0 +1,82 @@
+Express教程8_连接mysql
+
+create database segment; 
+1.segment库中建user表： 
+create table user( 
+uid int not null primary key auto_increment, 
+email varchar(60) not null, 
+pwd varchar(60) not null, 
+nicheng varchar(120) not null, 
+updtime timestamp not null, 
+createtime timestamp not null, 
+unique key emailuniq (email), 
+unique key nichenguiq (nicheng) 
+)ENGINE=myisam DEFAULT CHARSET=utf8; 
+ 
+2.添加mysql支持 
+npm install mysql --save-dev 
+ 
+3.修改ConnPool.js的写法： 
+var mysql  = require('mysql'); 
+module.exports = (function(){ 
+    var pool = mysql.createPool({     
+        host: 'localhost',       //主机 
+        user: 'root',               //MySQL认证用户名 
+        password: 'root',        //MySQL认证用户密码 
+        database: 'segment', 
+        port: '3306'                   //端口号 
+    }); 
+    pool.on('connection', function(connection) {  
+                connection.query('SET SESSION auto_increment_increment=1'); 
+                this.flag=false; 
+            }); 
+ 
+    return function(){ //返回的唯一的一个pool 
+        return pool; 
+    }; 
+})();//一个立即执行的匿名函数 
+ 
+4.修改UserModel.js 
+var connPool = require("./ConnPool"); 
+module.exports={ 
+    zhuce:function(req,res){ 
+        pool = connPool(); 
+        //从pool中获取连接(异步,取到后回调) 
+        pool.getConnection(function(err,conn){ 
+            var userAddSql = 'insert into user (email,pwd,nicheng,createtime) values(?,?,?,current_timestamp)'; 
+            var param = [req.body['email'],req.body['pwd'],req.body['nicheng']]; 
+            conn.query(userAddSql,param,function(err,rs){ 
+                if(err){ 
+                    //console.log('insert err:',err.message); 
+                    res.send("数据库错误,错误原因:"+err.message); 
+                    return; 
+                } 
+                res.send('注册成功'); 
+            }) 
+            conn.release(); 
+        }); 
+    }, 
+    login:function(req,res){ 
+        return a+b; 
+    } 
+} 
+ 
+5.users.js调用 
+var userModel = require('../models/UserModel'); 
+ 
+router.post('/zhuce', function(req, res) { 
+    subflag=req.body['subflag']; 
+    if(subflag!=undefined){ 
+        userModel.zhuce(req,res); 
+    }else{ 
+        res.send("表单提交错误"); 
+    } 
+}); 
+ 
+6.同样的email会报错： 
+数据库错误,错误原因:ER_DUP_ENTRY: Duplicate entry 'aa' for key 'emailuniq'       
+
+
+咨询QQ群号:168108911  
+
+             
