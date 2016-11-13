@@ -1,0 +1,114 @@
+1.改表：
+drop table question,replies;
+/*问题表*/
+create table question(
+qid bigint not null primary key auto_increment,
+typeid int not null,        /*问题分类*/
+typename varchar(120) not null,  /*分类名称*/
+title varchar(240) not null,    /*问题标题*/
+content text not null,    /*问题内容*/
+uid bigint not null,        /*提问者id*/
+nicheng varchar(120) not null, /*提问者昵称*/
+looknum bigint not null default 0,/*查看次数*/
+renum int not null default 0,    /*回复次数*/
+finished tinyint not null default 0,/*是否结贴,0表未结贴,1表结贴*/
+updtime timestamp not null,
+createtime timestamp not null
+)ENGINE=innodb DEFAULT CHARSET=utf8;
+
+/*问题回复表reply*/
+create table Replies(
+rpid bigint not null primary key auto_increment,
+qid bigint not null,
+content text not null,
+uid bigint not null,        /*提问者id*/
+nicheng varchar(120) not null, /*提问者昵称*/
+createtime timestamp not null
+)ENGINE=innodb DEFAULT CHARSET=utf8;
+
+2.修改queDetail.ejs
+<form method="post" action="/question/reply">
+            <% if(loginbean==undefined){ %>
+                请<a href="javascript:document.getElementById('loginBtn').click()">登录</a>后发表回答
+            <% }else{ %>
+            <textarea id="content" name="content" cols="120" rows="9"></textarea>
+                <br/>
+                <input type="hidden" name="qid" value="<%=rs[0].qid%>"/>
+                <input type="hidden" name="subflag" value="1"/>
+                <input type="submit" value="回答"/>
+            <% } %>
+            </form>
+
+3.models/QuestionModel.js中添加：
+reply:function(req,res){
+        loginbean = req.session.loginbean;
+        pool = connPool();
+        sql1 = 'insert into replies (qid,content,uid,nicheng) value(?,?,?,?)';
+        param1=[req.body['qid'],req.body['content'],loginbean.id,loginbean.nicheng];
+        sql2='update question set renum=renum+1 where qid=?';
+        param2=[req.body['qid']];
+        //从pool中获取连接(异步,取到后回调)
+        pool.getConnection(function(err,conn){
+            if (err) {
+                console.log('有错');
+                res.send("拿不到连接:"+err);
+                return;
+            }
+            conn.beginTransaction(function (err) {
+                if (err) {
+                    console.log('有错111');
+                    //return callback(err, null);
+                    res.send('启动事物处理出错');
+                    return;
+                }
+                async.series([ //串行series,并行parallel
+                    function(callback) {
+                        conn.query(sql1,param1,function(err,rs){
+                            if(err){
+                                console.log('有错'+err.message);
+                                callback(err,1);
+                                return;
+                            }
+                            //console.log('执行第1条完毕');
+                            callback(err,rs);//没有则callback(null,1);第2个参数是返回结果
+                        });
+                    },
+                    function(callback) {
+                        conn.query(sql2,param2,function(err,rs){
+                            if(err){
+                                console.log('有错'+err.message);
+                                callback(err,2);
+                                return;
+                            }
+                            //console.log('执行第1条完毕');
+                            callback(err,rs);//没有则callback(null,1);第2个参数是返回结果
+                        });
+                    }
+                ],function(err, result) {
+                    //console.log(result);
+                    if(err) {
+                        //console.log('调用回滚1');
+                        conn.rollback(function() {
+                            //throw err;
+                        });
+                        res.send('数据库错误:'+err);
+                        return;
+                    }
+                    // 提交事务
+                    conn.commit(function(err) {
+                        if (err) {
+                            console.log('调用回滚2');
+                            conn.rollback(function() {
+                                //throw err;
+                            });
+                            res.send('数据库错误:'+err);
+                            console.log('提交事物出错');
+                        }
+                        res.send('回复成功');
+                        console.log('success!');
+                    });
+                });
+            });
+            conn.release();
+        });
+    } 
